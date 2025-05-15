@@ -84,9 +84,21 @@ def combatSit(initialHealth):
             else:
                 print("Enemy Health: " + str(enemyStats[0]))
         elif action == "b":
-            Player.playerStats.health += 10
+            Player.print_consumables()
+            print("6. Cancel")
+
+            x = int(input()) - 1
+
+            if x == 5:
+                return
+
+            Player.playerStats.health += itemsInfo.healthPotions[x][1]
+            Player.playerStats.inventory[itemsInfo.healthPotions[x][0]]["amount"] -= 1
+
             if Player.playerStats.health > Player.playerStats.maximumHealth:
                 Player.playerStats.health = Player.playerStats.maximumHealth
+
+            
 
             print("Player Health: " + str(Player.playerStats.health))
             print("Enemy Health: " + str(enemyStats[0]))
@@ -100,7 +112,7 @@ def combatSit(initialHealth):
         gold = combat.loot(enemyStats[4], enemyStats[5])
         Player.playerStats.inventory["gold"]["amount"] += gold
         print("The enemy dropped " + str(gold) + " gold")
-        print("You now have " + str(Player.playerStats.inventory["gold"]["amount"]) + " total gold")
+        Player.print_gold()
 
 #Handles your interaction/s with the sword smith
 def swordSmith():
@@ -122,7 +134,7 @@ def swordSmith():
         y = itemsInfo.burningWasteSwords
     
     #Prints the list of swords you can buy based on the area you selected
-    print("You currently have " + str(Player.playerStats.inventory["gold"]["amount"]) + " gold")
+    Player.print_gold()
 
     if y == itemsInfo.grasslandSwords:
         y.pop(0)
@@ -147,7 +159,7 @@ def swordSmith():
         y.pop(buyItem)
 
         # Add information from the dictionary with the same name
-        print("You now have " + str(Player.playerStats.inventory["gold"]["amount"]) + " gold")  
+        Player.print_gold()
     else:
         print("You do not have enough gold to purchase this item")
 
@@ -171,7 +183,7 @@ def amourmentsDealer():
             y = itemsInfo.burningWasteArmour
         
         #Prints the list of swords you can buy based on the area you selected
-        print("You currently have " + str(Player.playerStats.inventory["gold"]["amount"]) + " gold")
+        Player.print_gold()
         for i in range(0, len(y)):
             print(str(i + 1) + ". " + str(y[i][0]) + " Price: " + str(y[i][3]) + " gold")
             i += 1
@@ -192,7 +204,7 @@ def amourmentsDealer():
 
             y.pop(buyItem)
 
-            print("You now have " + str(Player.playerStats.inventory["gold"]["amount"]) + " gold")  
+            Player.print_gold()
         else:
             print("You do not have enough gold to purchase this item")
 
@@ -200,7 +212,7 @@ def amourmentsDealer():
 def potionBrewer():
     
     # prints the amount of available gold that you have in your inventory
-    print("You currently have " + str(Player.playerStats.inventory["gold"]["amount"]) + " gold")
+    Player.print_gold()
     # prints the full list of available health potions
     for i in range(0, len(itemsInfo.healthPotions)):
         print(str(i + 1) + ". " + str(itemsInfo.healthPotions[i][0]) + " Price: " + str(itemsInfo.healthPotions[i][2]) + " gold")
@@ -219,7 +231,7 @@ def potionBrewer():
 
         # adds the health potions to your inventory inventory[potionName] | prints remaining gold and number of available health potions
         Player.playerStats.inventory[str(itemsInfo.healthPotions[buyItem][0])]["amount"] += amount
-        print("You now have " + str(Player.playerStats.inventory["gold"]["amount"]) + " gold")
+        Player.print_gold() 
         print("You now have " + str(Player.playerStats.inventory[str(itemsInfo.healthPotions[buyItem][0])]["amount"]) + " " + str(itemsInfo.healthPotions[buyItem][0]) + "(s) in your inventory")
     else:
         print("You do not have enough gold to purchase this item")

@@ -41,7 +41,16 @@ class playerStats:
             "type" : "consumable"
         }
     }
-    
+   
+def print_consumables():
+    i = 1
+    for item, details in playerStats.inventory.items():
+        if details["type"] == "consumable":
+            print(f"{i}. {item}({itemsInfo.healthDict[item]["amount"]} hp): {details['amount']}")    
+            i += 1
+
+def print_gold():
+    print("You have " + str(playerStats.inventory["gold"]["amount"]) + " gold.")
 
 def addXp(xpEarned):
     xpRequired = int(100 * (playerStats.level**1.5))
