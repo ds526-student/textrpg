@@ -85,11 +85,10 @@ def combatSit(initialHealth):
                 print("Enemy Health: " + str(enemyStats[0]))
         elif action == "b":
             Player.print_consumables()
-            print("6. Cancel")
 
             x = int(input()) - 1
 
-            if x == 5:
+            if x == len(itemsInfo.healthPotions):
                 return
 
             Player.playerStats.health += itemsInfo.healthPotions[x][1]
@@ -151,10 +150,12 @@ def swordSmith():
         Player.playerStats.inventory["gold"]["amount"] -= y[buyItem][4]
 
         # print(str(itemsInfo.ArmourDict["Leather vest"]["price"]))
-        Player.playerStats.inventory[str(y[buyItem][0])] = [{
+        Player.playerStats.inventory[str(y[buyItem][0])] = {
             **itemsInfo.SwordsDict.get(str(y[buyItem][0]), {}),
             "type": "sword"
-        }]
+        }
+
+        print(str(Player.playerStats.inventory[str(y[buyItem][0])]))
 
         y.pop(buyItem)
 
@@ -197,10 +198,12 @@ def amourmentsDealer():
             Player.playerStats.inventory["gold"]["amount"] -= y[buyItem][3]
 
             # print(str(itemsInfo.ArmourDict["Leather vest"]["price"]))
-            Player.playerStats.inventory[str(y[buyItem][0])] = [{
+            Player.playerStats.inventory[str(y[buyItem][0])] = {
                 **itemsInfo.ArmourDict.get(str(y[buyItem][0]), {}),
                 "type": "armour"
-            }]
+            }
+            
+            print(str(Player.playerStats.inventory[str(y[buyItem][0])]))
 
             y.pop(buyItem)
 
@@ -218,8 +221,13 @@ def potionBrewer():
         print(str(i + 1) + ". " + str(itemsInfo.healthPotions[i][0]) + " Price: " + str(itemsInfo.healthPotions[i][2]) + " gold")
         i += 1
 
+    print(str(i + 1) + ". Return")
+
     # selects the health potion that you want to buy
     buyItem = int(input()) - 1
+    
+    if buyItem == len(itemsInfo.healthPotions):
+        return
     
     # asks how many health potions you want to buy
     print("How many " + str(itemsInfo.healthPotions[buyItem][0]) + " would you like to buy?")
@@ -244,13 +252,16 @@ def dictionary():
 #Prints all player stats to the user
 def playerStats():
     print(str(Player.playerStats.health) + "/" + str(Player.playerStats.maximumHealth) + " health")
-    print("Weapon: " + Player.playerStats.weapon + " DPS: " + str(Player.playerStats.minimumDamage1) + "->" + str(Player.playerStats.maximumDamage1))
+    print("Weapon: " + Player.playerStats.weapon + " DPS: " + str(Player.playerStats.minimumDamage) + "->" + str(Player.playerStats.maximumDamage))
     print("Armour: " + Player.playerStats.armour + " Damage Reduction: " + str(Player.playerStats.damageReduction))
     print("Level " + str(Player.playerStats.level) + " " + str(Player.playerStats.xp) + "/" + str(int(100 * (Player.playerStats.level**1.5))) + "xp")
     input()
 
 #Allows you to interact with the stuff in town
 def town():
+    Player.playerStats.health = Player.playerStats.maximumHealth
+    print("Welcome to town! What would you like to do?")
+
     #Prints the list of things you can do in town
     for i in range(0, len(WorldMap.townList)):
         print(str(i + 1) +  ". " + WorldMap.townList[i])
@@ -332,7 +343,7 @@ def openInventory():
         else:
             print()
     else:
-        print(str(Player.playerStats.inventory))
+        Player.print_inventory()
     equipmentList.clear()
     i = 0
 

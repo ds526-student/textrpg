@@ -5,8 +5,6 @@ class playerStats:
     health = 100 
     weapon = "Wooden Sword"
     armour = "Cloth Scraps"
-    minimumDamage1 = itemsInfo.SwordsDict[weapon]["minDps"]
-    maximumDamage1 = itemsInfo.SwordsDict[weapon]["maxDps"]
     damageReduction = itemsInfo.ArmourDict[armour]["dmgRed"]
     minimumDamage = itemsInfo.SwordsDict[weapon]["minDps"]
     maximumDamage = itemsInfo.SwordsDict[weapon]["maxDps"]
@@ -46,11 +44,55 @@ def print_consumables():
     i = 1
     for item, details in playerStats.inventory.items():
         if details["type"] == "consumable":
-            print(f"{i}. {item}({itemsInfo.healthDict[item]["amount"]} hp): {details['amount']}")    
-            i += 1
+            if details["amount"] > 0:
+                print(f"{i}. {item}({itemsInfo.healthDict[item]["amount"]} hp): {details['amount']}")    
+                i += 1
+
+    print(str(i) + ". Cancel")
+
+def print_weapons():
+    i = 1
+    for item, details in playerStats.inventory.items():
+        if details["type"] == "sword":
+            if details["amount"] > 0:
+                print(f"{i}. {item}(dmg {itemsInfo.SwordsDict[item]["minDps"]} -> {itemsInfo.SwordsDict[item]["maxDps"]}) Required level {itemsInfo.SwordsDict[item]["levelReq"]}: {details['amount']}")
+                i += 1
+
+    print(str(i) + ". Cancel")
+
+def print_armor():
+    i = 1
+    for item, details in playerStats.inventory.items():
+        if details["type"] == "armour":
+            if details["amount"] > 0:
+                print(f"{i}. {item}: {details['amount']}")
+                i += 1
+
+    print(str(i) + ". Cancel")
 
 def print_gold():
     print("You have " + str(playerStats.inventory["gold"]["amount"]) + " gold.")
+
+def print_inventory():
+    print("Inventory:")
+    print("----------")
+    print("Weapons:")
+    for item, details in playerStats.inventory.items():
+        if isinstance(details, list): 
+            details = details[0]
+        if details["type"] == "sword":
+            print(f"{item} | Damage = {details['minDps']}->{details['maxDps']}) | level {details['levelReq']}")
+    print("Armour:")
+    for item, details in playerStats.inventory.items():
+        if isinstance(details, list): 
+            details = details[0]
+            print(f"{item}: | Damage Reduction = {details['dmgRed']}) | level {details['levelReq']}")
+    print("Consumables:")
+    for item, details in playerStats.inventory.items():
+        if details["type"] == "consumable" and details["amount"] > 0:
+            print(f"{item}({itemsInfo.healthDict[item]['amount']} hp): {details['amount']}")
+    print("----------")
+    print_gold()
 
 def addXp(xpEarned):
     xpRequired = int(100 * (playerStats.level**1.5))
@@ -62,7 +104,6 @@ def addXp(xpEarned):
         print("You Leveled up! You are now level " + str(playerStats.level))
         playerStats.xp -= xpRequired
         xpRequired = int(100 * (playerStats.level**1.5))
-        # playerStats.maximumHealth += 10
         playerStats.health = playerStats.maximumHealth
 
     print("current experience (" + str(playerStats.xp) + "/" + str(xpRequired) + ")")
