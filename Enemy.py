@@ -88,12 +88,14 @@ def xpCalc(pLevel, eLevel):
     baseXp = 50 * (eLevel**1.2) 
 
     levelDiff = eLevel - pLevel
+    print(f"Level difference: {levelDiff}")
     if levelDiff >= 3:
         xpMulti = 1 + (levelDiff - 2 * 0.25)
         if xpMulti > 2:
             xpMulti = 2
     elif levelDiff <= -3:
         xpMulti = 1 - (levelDiff + 2 * 0.25)
+        print("HELLO")
         if xpMulti < 0.25:
             xpMulti = 0.1
     elif levelDiff <= 2 and levelDiff >= -2:

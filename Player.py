@@ -10,7 +10,7 @@ class playerStats:
     maximumDamage = itemsInfo.SwordsDict[weapon]["maxDps"]
     # minimumDamage = 10000
     # maximumDamage = 10001
-    level = 1
+    level = 50
     xp = 0 
 
     inventory = {

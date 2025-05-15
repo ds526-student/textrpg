@@ -73,15 +73,15 @@ def combatSit(initialHealth):
             enemyDamage = combat.attack(enemyStats[1], enemyStats[2])
             playerDamage = combat.attack(Player.playerStats.minimumDamage, Player.playerStats.maximumDamage)
 
-            Player.playerStats.health -= enemyDamage
             enemyStats[0] -= playerDamage
 
-            #When enemy is dead set enemyDead = true
-            print("Player Health: " + str(Player.playerStats.health))
             if enemyStats[0] <= 0:
                 print("Enemy Health: 0")
                 enemyDead = True
             else:
+                Player.playerStats.health -= enemyDamage
+                #When enemy is dead set enemyDead = true
+                print("Player Health: " + str(Player.playerStats.health))
                 print("Enemy Health: " + str(enemyStats[0]))
         elif action == "b":
             Player.print_consumables()
@@ -291,12 +291,13 @@ def town():
 
 #Displays all the items within your inventory
 def openInventory():
-    print("Do you want to equip gear? (y/n)")
+    Player.print_inventory()
+    print("Would you like to equip any gear? (y/n)")
     x = input()
     equipmentList = []
     i = 0
     if x == "y":
-        print("Would you like to equip a new weapon or armour? (w/a)")
+        print("weapon or armour? (w/a)")
         x = input()
         if x == "w":
             for item, details in Player.playerStats.inventory.items():
@@ -317,8 +318,8 @@ def openInventory():
                 print("You are not a high enough level to equip this item")
             else:
                 Player.playerStats.weapon = equipmentList[x]
-                Player.playerStats.minimumDamage1 = itemsInfo.SwordsDict[equipmentList[x]]["minDps"]
-                Player.playerStats.maximumDamage1 = itemsInfo.SwordsDict[equipmentList[x]]["maxDps"]
+                Player.playerStats.minimumDamage = itemsInfo.SwordsDict[equipmentList[x]]["minDps"]
+                Player.playerStats.maximumDamage = itemsInfo.SwordsDict[equipmentList[x]]["maxDps"]
             
         elif x == "a":
             for item, details in Player.playerStats.inventory.items():
@@ -343,7 +344,7 @@ def openInventory():
         else:
             print()
     else:
-        Player.print_inventory()
+        return
     equipmentList.clear()
     i = 0
 
