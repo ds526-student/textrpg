@@ -198,7 +198,32 @@ def amourmentsDealer():
 
 #Handles your interaction/s with the Potion Brewer
 def potionBrewer():
-    print("Currently not available")
+    
+    # prints the amount of available gold that you have in your inventory
+    print("You currently have " + str(Player.playerStats.inventory["gold"]["amount"]) + " gold")
+    # prints the full list of available health potions
+    for i in range(0, len(itemsInfo.healthPotions)):
+        print(str(i + 1) + ". " + str(itemsInfo.healthPotions[i][0]) + " Price: " + str(itemsInfo.healthPotions[i][2]) + " gold")
+        i += 1
+
+    # selects the health potion that you want to buy
+    buyItem = int(input()) - 1
+    
+    # asks how many health potions you want to buy
+    print("How many " + str(itemsInfo.healthPotions[buyItem][0]) + " would you like to buy?")
+    amount = int(input())
+
+    # checks if you have enough gold to buy the health potions
+    if Player.playerStats.inventory["gold"]["amount"] >= itemsInfo.healthPotions[buyItem][2] * amount:
+        Player.playerStats.inventory["gold"]["amount"] -= itemsInfo.healthPotions[buyItem][2] * amount
+
+        # adds the health potions to your inventory inventory[potionName] | prints remaining gold and number of available health potions
+        Player.playerStats.inventory[str(itemsInfo.healthPotions[buyItem][0])]["amount"] += amount
+        print("You now have " + str(Player.playerStats.inventory["gold"]["amount"]) + " gold")
+        print("You now have " + str(Player.playerStats.inventory[str(itemsInfo.healthPotions[buyItem][0])]["amount"]) + " " + str(itemsInfo.healthPotions[buyItem][0]) + "(s) in your inventory")
+    else:
+        print("You do not have enough gold to purchase this item")
+        return
 
 #Prints enemy stats and drop rates based on the enemies you've killed
 def dictionary():
